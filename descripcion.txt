@@ -1,0 +1,152 @@
+Problema a desarrollar: 
+
+Crear una tienda en línea utilizando HTML, CSS, BOOTSTRAP y js. 
+En una matriz predefinida se almacena el catálogo de productos que incluye el id del producto, descripción, imagen y el precio unitario.
+La ventana principal debe mostrar el catálogo utilizado tarjetas en flexbox que muestre la imagen, el precio y permita seleccionar la cantidad de productos
+Cada vez que se cambie la cantidad de productos debe desplegarse en un área de la pantalla el subtotal de la compra (id, descripcion, cantidad, precio unitario y subtotal)
+Al presionar un botón de "comprar" indicar en otra ventana la lista de productos seleccionados a manera de ticket de compra, (id, descripción, cantidad, precio unitario y subtotal) y el total general.
+Paso 1: Configura la estructura HTML y Bootstrap
+
+Utilice el siguiente código de base, y mejore la interfaz usando bootstrap y css para presentar el catálago usando tarjetas, y crear un área para mostrar el avance de la venta
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda en Línea</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Tienda en Línea</h1>
+        <div class="row" id="catalogo">
+            <!-- Las tarjetas de productos se generarán dinámicamente con JavaScript -->
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-4 offset-md-8">
+                <h3>Resumen de Compra</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resumenCompra">
+                        <!-- Los detalles de la compra se generarán dinámicamente con JavaScript -->
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>Total:</td>
+                            <td></td>
+                            <td id="total"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <button class="btn btn-primary" id="finalizarCompra">Finalizar Compra</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+Paso 2: Define una matriz de productos en JavaScript
+
+En el archivo "script.js," define una matriz de productos con su ID, imagen y precio unitario. modifíquelo para agregar la descripción:
+
+// script.js
+document.addEventListener("DOMContentLoaded", function () {
+    const catalogo = [
+        { id: 1, imagen: "producto1.jpg", precio: 10 },
+        { id: 2, imagen: "producto2.jpg", precio: 15 },
+        { id: 3, imagen: "producto3.jpg", precio: 20 },
+        // Agrega más productos aquí
+    ];
+
+    const catalogoContainer = document.getElementById("catalogo");
+    const resumenCompra = document.getElementById("resumenCompra");
+    const total = document.getElementById("total");
+
+    // Genera las tarjetas de productos en el catálogo
+    catalogo.forEach((producto) => {
+        const card = document.createElement("div");
+        card.classList.add("col-md-4", "mb-4");
+        card.innerHTML = `
+            <div class="card">
+                <img src="${producto.imagen}" class="card-img-top" alt="Producto ${producto.id}">
+                <div class="card-body">
+                    <h5 class="card-title">Producto ${producto.id}</h5>
+                    <p class="card-text">Precio: $${producto.precio}</p>
+                    <label for="cantidadProducto${producto.id}">Cantidad:</label>
+                    <input type="number" id="cantidadProducto${producto.id}" class="form-control">
+                    <button class="btn btn-primary mt-2" data-id="${producto.id}">Agregar al Carrito</button>
+                </div>
+            </div>
+        `;
+        catalogoContainer.appendChild(card);
+
+        // Agrega un evento de clic al botón de "Agregar al Carrito"
+        const botonAgregar = card.querySelector("button");
+        botonAgregar.addEventListener("click", function () {
+            const cantidad = parseInt(document.getElementById(`cantidadProducto${producto.id}`).value);
+
+            if (cantidad > 0) {
+                agregarProductoAlCarrito(producto, cantidad);
+            }
+        });
+    });
+
+    const carrito = [];
+
+    function agregarProductoAlCarrito(producto, cantidad) {
+        // Busca si el producto ya está en el carrito
+        const productoEnCarrito = carrito.find((item) => item.producto.id === producto.id);
+
+        if (productoEnCarrito) {
+            // Si ya está en el carrito, actualiza la cantidad
+            productoEnCarrito.cantidad += cantidad;
+        } else {
+            // Si no está en el carrito, agrega un nuevo elemento al carrito
+            carrito.push({ producto, cantidad });
+        }
+
+        // Actualiza el resumen de la compra
+        actualizarResumenCompra();
+    }
+
+    function actualizarResumenCompra() {
+        // Limpia el resumen de compra
+        resumenCompra.innerHTML = "";
+        let subtotalTotal = 0;
+
+        carrito.forEach((item) => {
+            const fila = document.createElement("tr");
+            fila.innerHTML = `
+                <td>Producto ${item.producto.id}</td>
+                <td>${item.cantidad}</td>
+                <td>$${item.producto.precio * item.cantidad}</td>
+            `;
+            resumenCompra.appendChild(fila);
+
+            subtotalTotal += item.producto.precio * item.cantidad;
+        });
+
+        // Actualiza el total
+        total.textContent = `$${subtotalTotal}`;
+    }
+});
+Paso 3: Análisis
+
+Explique cada una de las funciones definidas por el usuario en el código JavaScript presentado en el paso 2. 
+En el código js, ¿qué tipo de variable es "catalogo"? ¿Como se manipula?
+¿Que hace const card = document.createElement("div") ?
+¿Que hace card.innerHTML ?
+¿Que hace catalogoContainer.appendChild(card) ?
+Implemente el botón "comprar", recuerde que debe abrirse otra página y presentar el ticket de compra
+Envíe el proyecto en un archivo comprimido
+Envíe la liga de github
+ 

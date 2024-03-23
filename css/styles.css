@@ -1,0 +1,29 @@
+
+.card-container{
+    max-width: 200px;
+    max-height: 450px;
+    margin: 0px;
+    padding: 5px;
+}
+
+
+#catalogo-container {
+    display: flex;
+    justify-content: center; /* horizontally center items */
+}
+#catalogo {
+    width: 80%; /* set a fixed width */
+    display: flex;
+    flex-wrap: wrap; /* allow items to wrap when there's not enough space */
+    justify-content: flex-start; /* align items to the left */
+}
+
+.card img{
+    padding: 10px;
+}
+
+.card-body, .input-group, .container{
+    margin: 0px;
+    padding: 0px;
+}
+
