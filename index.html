@@ -1,66 +1,75 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rainforest</title>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="icon" href="img/logo.png">
+    <script src="js/script.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 </head>
+
 <body>
-    <nav class="navbar navbar-dark bg-dark justify-content-between">
-        <a class="navbar-brand">Rainforest</a>
-        <form class="form-inline">
+    <nav class="navbar justify-content-between navbar-custom">
+        <a class="navbar-brand"><img src="img/rainforestw.png" alt=""></a>
+        <div class="btn-group">
             <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Dropdown button
+                <button id="categoriesButton" class="btn btn-secondary dropdown-toggle" type="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Todas las categorías
                 </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="#">Action</a>
-                  <a class="dropdown-item" href="#">Another action</a>
-                  <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-              </div>
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
-      </nav>
-    <div class="container mt-5">
-        
-        
-        <div id="catalogo-container">
-            <div class="row" id="catalogo">
-                <!-- Card containers will be dynamically generated here -->
+                <ul class="dropdown-menu">
+                    <li><a id="allItems" class="dropdown-item" href="#">Todo</a></li>
+                    <div class="dropdown-divider"></div>
+                    <li><a id="cdItems" class="dropdown-item" href="#">Albúms</a></li>
+                    <li><a id="bookItems" class="dropdown-item" href="#">Libros</a></li>
+                </ul>
             </div>
         </div>
-        <hr>
-        <div class="row">
-            <div class="col-md-4 offset-md-8">
-                <h3>Resumen de Compra</h3>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Producto</th>
-                            <th>Cantidad</th>
-                            <th>Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody id="resumenCompra">
-                        <!-- Los detalles de la compra se generarán dinámicamente con JavaScript -->
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td>Total:</td>
-                            <td></td>
-                            <td id="total"></td>
-                        </tr>
-                    </tfoot>
-                </table>
-                <button class="btn btn-primary" id="finalizarCompra">Finalizar Compra</button>
+        <input id="searchbar" class="form-control" type="search" placeholder="Search Rainforest.com.mx"
+            aria-label="Search">
+        <button id="searchbutton" class="btn btn-warning" type="submit"><img src="img/magnifying-glass-svgrepo-com.svg"
+                alt=""></button>
+
+
+        <div class="containerCart">
+            <div class="btn-group">
+                <button id="cart" class="btn btn-secondary" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    0
+                </button>
+                <div class="dropdown-menu dropdown-menu-end"> <!-- Use dropdown-menu-end to align to the end -->
+                    <div id="cartItems">
+
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">
+                        <div class="d-flex justify-content-between">
+                            <span>Total</span>
+                            <span id="totalSpan">$0.00</span>
+                        </div>
+                    </a>
+                </div>
             </div>
+
+
+        </div>
+
+    </nav>
+
+    <div class="container" id="catalogo-container">
+        <div class="row" id="catalogo">
+            <!-- Card containers will be dynamically generated here -->
         </div>
     </div>
 
-    <script src="js/script.js"></script>
+
 </body>
+
 </html>
