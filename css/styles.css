@@ -26,9 +26,15 @@
     grid-auto-flow: dense; /* Ensure that remaining items fill in the gaps */
 }
 
+.card{
+    align-items: center;
+}
+
 .card img {
     padding: 4px;
-    
+    height: 179px;    
+    width: auto;
+    align-self: center;
 }
 
 .card-text{
@@ -43,7 +49,7 @@
 
 /* Impide que la tarjeta tenga un titulo largo */
 .card-title,
-.card-text {
+.card-text,.card-author {
     text-overflow: ellipsis;
     overflow: hidden;
     width: 160px;
@@ -117,8 +123,14 @@
 .cartItem img{
     height: 50px;
     padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .dropdown-menu {
     width: 300px;
+}
+
+#categoriesButton{
+    width: 150px;
 }
