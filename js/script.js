@@ -20,9 +20,11 @@ let total = 0;
 var tipoFiltro = "all";
 
 class CartItem {
-    constructor(id, quantity) {
+    constructor(id, quantity, price, image) {
         this.id = id;
         this.quantity = quantity;
+        this.price = price;
+        this.image = image;
     }
 }
 let cart = [];
@@ -38,7 +40,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const cdItems = document.getElementById("cdItems");
     const bookItems = document.getElementById("bookItems");
     const catButton = document.getElementById("categoriesButton");
-
+    //Loads the saved cart
+    const cartData = JSON.parse(localStorage.getItem("cart"));
+    console.log(cartData);
+    if(cartData)
+    {
+        cart = cartData.map(item => new CartItem(item.id, item.quantity, item.price,item.image));
+        refreshCart();
+    }
+        
     allItems.addEventListener("click",function(){
         tipoFiltro = "all";
         filtrar(searchBar.value);
@@ -84,10 +94,10 @@ function cargarProductos(catalogo) {
                     <div><img src="img/products/${producto.imagen}" class="card-img-top" alt="${producto.id}"></div>
                     <div class="card-body">
                         <h5 class="card-title">${producto.id}</h5>
-                        <p class="card-author">by ${producto.autor}</p>
+                        <p class="card-author">de ${producto.autor}</p>
                         <p class="card-text">$${producto.precio}</p>
                         <input type="number" min="0" class="form-control" data-id="cantidadProducto" value="1">
-                        <button class="cantidadField btn btn-primary mt-2" data-id="${producto.id}">Add to Cart</button>
+                        <button class="cantidadField btn btn-primary mt-2" data-id="${producto.id}">Añadir a Carrito</button>
                     </div>
                     </div>
                 </div>
@@ -98,8 +108,7 @@ function cargarProductos(catalogo) {
     });
     const buttons = document.querySelectorAll('.cantidadField');
 
-    const cartTag = document.getElementById("cart");
-    const cartTotal = document.getElementById("totalSpan");
+    
     
     buttons.forEach(button => {
         button.addEventListener('click', function () {
@@ -109,58 +118,61 @@ function cargarProductos(catalogo) {
             const inputField = cardContainer.querySelector('input[data-id="cantidadProducto"]');
 
             const inputValue = inputField.value;
-            console.log(`Input value: ${inputValue}`);
             // Get the sibling <h5> element
             const h5Element = cardContainer.querySelector('.card-title');
             const h5Value = h5Element.textContent; // Retrieve the text content
-
-            console.log(`Product ID: ${h5Value}`);
+            let currentItem = catalogoCompleto.find((p) => p.id===buttonValue);
             if (!cart.some(e => e.id === h5Value)) {
-                cart.push(new CartItem(buttonValue, inputValue));
+                cart.push(new CartItem(buttonValue, inputValue,currentItem.precio,currentItem.imagen));
                 added = added + 1;
             }
             else
             {
                 const product = cart.find(producto => producto.id === buttonValue);
-                console.log(product);
-                console.log(inputValue);
                 product.quantity = Number.parseInt(product.quantity)+Number.parseInt(inputValue);
             }
-            //Resets the total
-            total = 0;
-            const items = document.getElementById("cartItems");
-            items.innerHTML = "";
-            let itemDiv = document.createElement("div");
-            // Recalculates the total of the cart
-            cart.forEach((item)=>{
-                const product = catalogoCompleto.find(producto => producto.id === item.id);
-                const precio = Number.parseInt(product.precio);
-                console.log(precio);
-                total = total + Number.parseInt(item.quantity)*precio;
-                itemDiv = document.createElement("div");
-                console.log(item.id);
-                let currentItem = catalogoCompleto.find((p) => p.id===item.id);
-                itemDiv.innerHTML = `
-                <div class="cartItem" style="width: 280px; display: flex; align-items: center;">
-                    <div style="display: inline; margin-right:10px;"><img src="img/products/${currentItem.imagen}"></div>
-                    <span style="flex-grow: 1; padding-right: 15px;">${currentItem.id}</span>
-                    <span style="text-align: right;">$${currentItem.precio}x${item.quantity}</span>
-                </div>
-                `;
-                items.appendChild(itemDiv);
-            });
+            refreshCart();
             
-            
-            cartTotal.textContent = "$"+total+".00";
-            cartTag.textContent = added;
         });
     });
+    
 }
 
+
+function refreshCart(){
+    const cartTag = document.getElementById("cart");
+    const cartTotal = document.getElementById("totalSpan");
+    //Resets the total
+    total = 0;
+    added = cart.length;
+    const items = document.getElementById("cartItems");
+    items.innerHTML = "";
+    let itemDiv = document.createElement("div");
+    // Recalculates the total of the cart
+    cart.forEach((item)=>{
+        const product = catalogoCompleto.find(producto => producto.id === item.id);
+        const precio = Number.parseInt(product.precio);
+        currentItem = catalogoCompleto.find((p) => p.id===item.id);
+        total = Number.parseInt(total) + Number.parseInt(item.quantity)*precio;
+        itemDiv = document.createElement("div");
+        
+        itemDiv.innerHTML = `
+        <div class="cartItem" style="width: 280px; display: flex; align-items: center;">
+            <div style="display: inline; margin-right:10px;"><img src="img/products/${currentItem.imagen}"></div>
+            <span style="flex-grow: 1; padding-right: 15px;">${currentItem.id}</span>
+            <span style="text-align: right;">$${currentItem.precio}x${item.quantity}</span>
+        </div>
+        `;
+        items.appendChild(itemDiv);
+    });
+    
+    localStorage.setItem("cart",JSON.stringify(cart));
+    cartTotal.textContent = "$"+total+".00";
+    cartTag.textContent = added;
+}
 // Filtra los productos basados en tipo, autor o id
 function filtrar(filter) {
     const lowerCaseFilter = filter.toLowerCase(); 
-
     const filteredItems = catalogoCompleto.filter(item => {
         const lowerCaseId = item.id.toLowerCase(); 
         const lowerCaseAutor = item.autor.toLowerCase(); 
